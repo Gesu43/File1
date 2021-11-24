@@ -1,0 +1,168 @@
+class ElementoMultimediale
+    {
+        public string titolo { get; set; }
+        public ElementoMultimediale(string titolo)
+        {
+            this.titolo = titolo;
+        }
+        public ElementoMultimediale()
+        {
+        }
+
+        public string Stampa()
+        {
+            string s = null;
+            return s;
+        }
+    }
+    
+    ------------------------------------------------------------------
+    
+    class Audio : ElementoMultimediale
+    {
+        //max volume = 5
+        public int volume { get; set; }
+        public int durata { get; set; }
+
+        public Audio(string titolo,  int volume, int durata) : base( titolo)
+        {
+            this.volume = volume;
+            this.durata = durata;
+        }
+        public Audio()
+        {
+        }
+
+        public void Weaker()
+        {
+            if (volume > 0)
+                volume--;
+        }
+        public void Louder()
+        {
+            if (volume < 5)
+                volume++;
+        }
+
+        public string Play()
+        {
+            string str = titolo + " ";
+            for (int i = 0; i < durata;  i++)
+            {
+                str += base.Stampa();
+                for (int j = 0; j < volume; j++)
+                    str += "!";
+                str += "\t";
+            }
+            str += "\n";
+            return str;
+        }
+    }
+    
+   ----------------------------------------------------------------
+   
+   class Filmato : ElementoMultimediale
+    {
+        public int volume { get; set; }
+        public int durata { get; set; }
+        public int luminosità { get; set; }
+
+        public Filmato(string titolo, int volume, int durata, int luminosità) : base(titolo)
+        {
+            this.volume = volume;
+            this.durata = durata;
+            this.luminosità = luminosità;
+        }
+
+        public void Darker()
+        {
+            if (luminosità > 0)
+                luminosità--;
+        }
+        public void Brighter()
+        {
+            if (luminosità < 5)
+                luminosità++;
+        }
+        public void Weaker()
+        {
+            if (volume > 0)
+                volume--;
+        }
+        public void Louder()
+        {
+            if (volume < 5)
+                volume++;
+        }
+
+        public string Play()
+        {
+            string str = titolo + " ";
+            for (int i = 0; i < durata; i++)
+            {
+                str += base.Stampa();
+                for (int j = 0; j < volume; j++)
+                    str += "!";
+                for (int k = 0; k< luminosità; k++)
+                    str += "*";
+                str += "\t";
+            }
+            str += "\n";
+            return str;
+        }
+    }
+    
+-------------------------------------------------------------------------
+
+class Immagine : ElementoMultimediale
+    {
+        public int luminosità { get; set; }
+
+        public Immagine(string titolo, int luminosità) : base(titolo)
+        {
+            this.luminosità = luminosità;
+        }
+
+        public void Darker()
+        {
+            if (luminosità > 0)
+                luminosità--;
+        }
+        public void Brighter()
+        {
+            if (luminosità < 5)
+                luminosità++;
+        }
+        public string Show()
+        {
+            string str = titolo + " ";
+            for (int k = 0; k < luminosità; k++)
+                    str += "*";
+            str += "\n";
+            return str;
+        }
+    }
+    
+---------------------------------------------------------------------------------
+
+class Program
+    {
+        static void Main(string[] args)
+        {
+            Immagine i = new Immagine("Foto", 4);
+
+            i.Darker();
+            Console.WriteLine(i.Show());
+
+            Filmato f = new Filmato("Video", 5, 10, 4);
+
+            f.Darker();
+            f.Louder();
+            Console.WriteLine(f.Play());
+
+            Audio a = new Audio("Audio", 10, 4);
+
+            Console.WriteLine(a.Play());
+
+        }
+    }
