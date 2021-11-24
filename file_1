@@ -1,0 +1,235 @@
+using System;
+using System.Collections.Generic;
+
+namespace Es12
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool exit = false;
+            string comando;
+            Garage garage = new Garage();
+            while (!exit)
+            {
+                Console.WriteLine("Aggiungi = aggiungi veicolo | Rimuovi = rimuovi veicolo | Stampa = stampa veicoli");
+                comando = Console.ReadLine();
+
+                switch(comando)
+                {
+                    case "Aggiungi":
+                        garage.Add();
+                        break;
+
+                    case "Rimuovi":
+                        break;
+
+                    case "Stampa":
+                        garage.Stampa();
+                        break;
+
+                    default:
+                        Console.WriteLine("Oops, qualcosa è andato storto");
+                        break;
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+
+    class Garage
+    {
+        List<Veicolo> listGarage = new List<Veicolo>();
+        Veicolo[] arrGarage = new Veicolo[15];
+
+        public void Add()
+        {
+            if (listGarage.Count < 15)
+            {
+                Console.WriteLine("Inserisci tipo Veicolo");
+                string type = Console.ReadLine();
+                while (type != "Moto" && type != "Auto" && type != "Furgone")
+                {
+                    Console.WriteLine("Tipologie possibili = Moto, Auto, Furgone");
+                    type = Console.ReadLine();
+                }
+
+                Console.WriteLine("Inserisci marca Veicolo");
+                string marca = Console.ReadLine();
+
+                string anno;
+                int tempAnno;
+                do
+                {
+                    Console.WriteLine("Inserisci anno Veicolo (ATTENZIONE Formato numerico!)");
+                }
+                while (!Int32.TryParse(Console.ReadLine(), out tempAnno));
+                anno = Convert.ToString(tempAnno);
+
+                string cyl;
+                int tempCyl;
+                do
+                {
+                    Console.WriteLine("Inserisci cilindrata Veicolo (ATTENZIONE Formato numerico!)");
+                }
+                while (!Int32.TryParse(Console.ReadLine(), out tempCyl));
+                cyl = Convert.ToString(tempCyl);
+                switch (type)
+                {
+                    case "Moto":
+                        string tempi;
+                        do
+                        {
+                            Console.WriteLine("Inserisci tempi Veicolo (ATTENZIONE 2 o 4 !)");
+                            tempi = Console.ReadLine();
+                        }
+                        while (tempi != "2" && tempi != "4");
+                        int i = 0;
+                        while (arrGarage[i] != null)
+                            i++;
+                        Moto nMoto = new Moto(Convert.ToString(i), marca, anno, cyl, tempi);
+                        arrGarage[i] = nMoto;
+                        listGarage.Add(nMoto);
+                        break;
+
+                    case "Auto":
+                        string numeroPorte;
+                        string alimentazione;
+                        do
+                        {
+                            Console.WriteLine("Inserisci numero delle porte del Veicolo (ATTENZIONE 3 o 5 !)");
+                            numeroPorte = Console.ReadLine();
+                        }
+                        while (numeroPorte != "3" && numeroPorte != "5");
+                        do
+                        {
+                            Console.WriteLine("Inserisci alimentazione del veicolo (ATTENZIONE Diesel o Benzina !)");
+                            alimentazione = Console.ReadLine();
+                        }
+                        while (alimentazione != "Diesel" && alimentazione != "Benzina");
+
+                        int c = 0;
+                        while (arrGarage[c] != null)
+                            c++;
+
+                        Auto nAuto = new Auto(Convert.ToString(c), marca, anno, cyl, numeroPorte, alimentazione);
+                        arrGarage[c] = nAuto;
+                        listGarage.Add(nAuto);
+                        break;
+
+                    case "Furgone":
+                        string capacita;
+                        int cap;
+                        do
+                        {
+                            Console.WriteLine("Inserisci capacità Veicolo (ATTENZIONE Formato numerico!)");
+                        }
+                        while (!Int32.TryParse(Console.ReadLine(), out cap) && cap < 0);
+                        capacita = Convert.ToString(cap);
+
+                        int y = 0;
+                        while (arrGarage[y] != null)
+                            y++;
+
+                        Furgone nFurgone = new Furgone(Convert.ToString(y), marca, anno, cyl, capacita);
+                        arrGarage[y] = nFurgone;
+                        listGarage.Add(nFurgone);
+                        break;
+                }
+            }
+        }
+
+        public void Stampa()
+        {
+            Moto typeMoto;
+            Auto typeAuto;
+            Furgone typeFurgone;
+            foreach (Veicolo x in listGarage)
+            {
+                if (x is Moto)
+                {
+                    typeMoto = (Moto)x;
+                    typeMoto.Stampa();
+                }
+                else if (x is Auto)
+                {
+                    typeAuto = (Auto)x;
+                    typeAuto.Stampa();
+                }
+                else if (x is Furgone)
+                {
+                    typeFurgone = (Furgone)x;
+                    typeFurgone.Stampa();
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+
+    class Veicolo
+    {
+        protected string id { get; set; }
+        protected string marca { get; set; }
+        protected string anno { get; set; }
+        protected string cyl { get; set; }
+    }
+
+    class Auto : Veicolo
+    {
+        string numeroPorte { get; set; }
+        string alimentazione { get; set; }
+
+        public void Stampa()
+        {
+            Console.WriteLine("ID = " + id + "\nMarca = " + marca + "\nAnno = " + anno + "\nCilindrata = " + cyl + "\nNumero porte = " + numeroPorte + "\nAlimentazione = " + alimentazione);
+        }
+
+        public Auto(string id, string marca, string anno, string cyl, string numeroPorte, string alimentazione)
+        {
+            this.id = id;
+            this.marca = marca;
+            this.anno = anno;
+            this.cyl = cyl;
+            this.numeroPorte = numeroPorte;
+            this.alimentazione = alimentazione;
+        }
+    }
+
+    class Moto : Veicolo
+    {
+        string tempi { get; set; }
+
+        new public void Stampa()
+        {
+            Console.WriteLine("ID = " + id + "\nMarca = " + marca + "\nAnno = " + anno + "\nCilindrata = " + cyl + "\nTempi = " + tempi);
+        }
+
+        public Moto(string id, string marca, string anno, string cyl, string tempi)
+        {
+            this.id = id;
+            this.marca = marca;
+            this.anno = anno;
+            this.cyl = cyl;
+            this.tempi = tempi;
+        }
+    }
+
+    class Furgone : Veicolo
+    {
+        string capienza { get; set; }
+
+        new public void Stampa()
+        {
+            Console.WriteLine("ID = " + id + "\nMarca = " + marca + "\nAnno = " + anno + "\nCilindrata = " + cyl + "\nCapienza = " + capienza);
+        }
+
+        public Furgone(string id, string marca, string anno, string cyl, string capienza)
+        {
+            this.id = id;
+            this.marca = marca;
+            this.anno = anno;
+            this.cyl = cyl;
+            this.capienza = capienza;
+        }
+    }
+}
